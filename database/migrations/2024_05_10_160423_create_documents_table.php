@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('author_id')->constrained('users');
             $table->string('title');
             $table->string('current_version');
             $table->enum('status', DocumentStatus::values());
