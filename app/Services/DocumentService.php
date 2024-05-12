@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Enums\UserRole;
 use App\Models\Document;
+use App\Models\DocumentUser;
+use App\Models\DocumentVersion;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -33,5 +35,24 @@ class DocumentService
             ->whereHas('versions')
             ->withClient($client->id)
             ->latest()->paginate(20);
+    }
+
+    public function getLatestDocumentVersion(Document $document): object
+    {
+        return $document->versions()
+            ->orderBy('version', 'DESC')
+            ->first();
+    }
+
+    public function getClientLastViewedDocument(Document $document): ?DocumentVersion
+    {
+        return $document->versions()?->whereVersion($this->getClientLastViewedVersion($document->id))->first();
+    }
+
+    public function getClientLastViewedVersion($documentId): string
+    {
+        return DocumentUser::whereDocumentId($documentId)
+            ->whereUserId(auth()->id())
+            ->latest()->value('last_viewed_version');
     }
 }

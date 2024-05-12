@@ -1,8 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, Link} from '@inertiajs/react';
 
-export default function Show({ auth, document }) {
-
+export default function Show({ auth, document, latestDocumentVersion, clientLastViewedDocument }) {
+    console.log(latestDocumentVersion)
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -11,11 +11,20 @@ export default function Show({ auth, document }) {
             <Head title="Document Show"/>
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <textarea className="form-textarea" rows="10" value={document.body_content} readOnly/>
-                    </div>
-                </div>
+                <h1 className="font-bold text-center">{document.title}</h1>
+
+                <h2>Latest Version</h2>
+                <pre>{latestDocumentVersion.body_content}</pre>
+
+                {clientLastViewedDocument && (
+                    <>
+                        <h2>Last Viewed Version</h2>
+                        <pre>{clientLastViewedDocument.body_content}</pre>
+
+                        <h2>Diff</h2>
+                        <div id="diffContainer"></div>
+                    </>
+                )}
             </div>
         </AuthenticatedLayout>
     );

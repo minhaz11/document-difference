@@ -55,4 +55,13 @@ class User extends Authenticatable
             ->withPivot('last_viewed_version')->withTimestamps();
     }
 
+
+    public function lastViewedVersion($document)
+    {
+        return $this->clientDocuments()
+            ->where('document_id', $document->id)
+            ->orderBy('last_viewed_version', 'desc')
+            ->first();
+    }
+
 }

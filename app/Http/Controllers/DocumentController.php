@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\DocumentService;
@@ -25,8 +26,16 @@ class DocumentController extends Controller
 
     public function show(Document $document)
     {
+        $latestDocumentVersion = $this->documentService->getLatestDocumentVersion($document);
+
+        $clientLastViewedDocument = auth()->user()->role === UserRole::CLIENT->value
+            ? $this->documentService->getClientLastViewedDocument($document)
+            : null;
+
         return Inertia::render('Document/Show', [
             'document' => $document,
+            'latestDocumentVersion' => $latestDocumentVersion,
+            'clientLastViewedDocument' => $clientLastViewedDocument,
         ]);
     }
 }
