@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Document;
 use App\Models\DocumentUser;
+use App\Models\DocumentVersion;
 use App\Models\User;
 use Database\Factories\DocumentUserFactory;
 use Illuminate\Database\Seeder;
@@ -36,9 +37,8 @@ class DatabaseSeeder extends Seeder
 
         DocumentUser::factory(2)->create([
             'user_id' => $singleUser->id,
-            'document_id' => fake()->randomElement(
-                Document::active()->whereHas('versions')->take(3)->pluck('id')->toArray()
-            ),
+            'document_id' => DocumentVersion::first()->value('document_id'),
+            'last_viewed_version' => DocumentVersion::first()->value('version')
         ]);
 
         $this->command->info('Data has been seeded successfully.');

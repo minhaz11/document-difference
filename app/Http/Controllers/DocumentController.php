@@ -6,7 +6,6 @@ use App\Enums\UserRole;
 use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\DocumentService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DocumentController extends Controller

@@ -15,18 +15,19 @@ class DocumentVersionSeeder extends Seeder
      */
     public function run(): void
     {
-        $documents = Document::active()->inRandomOrder()
+        $documents = Document::active()
             ->take(500)
-            ->get(['id','current_version']);
+            ->get(['id']);
 
+        $randomDocument = $documents->random();
 
-        DocumentVersion::factory(2500)->create(function () use ($documents) {
-            $randomDocument = $documents->random();
-            return [
-                'document_id' => $randomDocument->id,
-                'version' => intval($randomDocument->current_version) + 1,
-            ];
-        });
+        DocumentVersion::factory(2500)->create([
+            'document_id' => $randomDocument->id,
+            'version' => function () use ($randomDocument) {
+                return DocumentVersion::where('document_id', $randomDocument->id)->max('version')
+                       + fake()->randomFloat(2, 1.5, 2.5);
+            },
+        ]);
 
 
     }

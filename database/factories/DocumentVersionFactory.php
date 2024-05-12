@@ -21,8 +21,19 @@ class DocumentVersionFactory extends Factory
         return [
             'document_id'  => fake()->randomElement(Document::pluck('id')->toArray()),
             'version'      => fake()->randomFloat(2, 1, 2),
-            'body_content' => '{\"introduction\": \"<ul><li>Federal Government\'s superannuation reforms in the 2020.\\t</li></ul>\", \"facts\": \"<ul><li>Federal Government\'s superannuation reforms in the 2020.\\t</li></ul>\", \"summary\": \"<ul><li>Federal Government\'s superannuation reforms in the 2020.\\t</li></ul>\"}',
+            'body_content' => $this->fakeContent(),
             'tags_content' => "<ul><li>Federal Government's superannuation reforms in the 2020.\t</li></ul>",
         ];
+    }
+
+    private function fakeContent(): string
+    {
+        $sentence = fake()->sentence();
+
+        return json_encode([
+            'introduction' => $sentence,
+            'facts' => "Federal Government's superannuation reforms in the 2020",
+            'summary' => "<ul><li>{$sentence} Federal Government's superannuation reforms in the 2020.\t</li></ul>",
+        ]);
     }
 }

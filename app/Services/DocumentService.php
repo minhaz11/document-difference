@@ -46,13 +46,16 @@ class DocumentService
 
     public function getClientLastViewedDocument(Document $document): ?DocumentVersion
     {
-        return $document->versions()?->whereVersion($this->getClientLastViewedVersion($document->id))->first();
+        return DocumentVersion::whereDocumentId($document->id)
+            ->whereVersion($this->getClientLastViewedVersion($document->id))
+            ->first();
     }
 
     public function getClientLastViewedVersion($documentId): string
     {
         return DocumentUser::whereDocumentId($documentId)
             ->whereUserId(auth()->id())
-            ->latest()->value('last_viewed_version');
+            ->orderBy('last_viewed_version', 'desc')
+            ->value('last_viewed_version');
     }
 }

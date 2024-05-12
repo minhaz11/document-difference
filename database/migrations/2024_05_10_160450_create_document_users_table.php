@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('document_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('last_viewed_version');
+            $table->text('document_difference')->nullable();
             $table->timestamps();
         });
     }

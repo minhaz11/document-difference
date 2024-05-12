@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\UserRole;
 use App\Models\Document;
+use App\Models\DocumentVersion;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +23,11 @@ class DocumentUserFactory extends Factory
      */
     public function definition(): array
     {
+        $documentId = fake()->randomElement($this->getDocumentIds());
         return [
-            'document_id'         => fake()->randomElement($this->getDocumentIds()),
+            'document_id'         => $documentId,
             'user_id'             => fake()->randomElement($this->getUserIds()),
-            'last_viewed_version' => fake()->randomFloat(2, 1, 2)
+            'last_viewed_version' => DocumentVersion::whereDocumentId($documentId)->first()->value('version')
         ];
     }
 

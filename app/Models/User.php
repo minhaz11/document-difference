@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
+use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,12 +58,14 @@ class User extends Authenticatable
     }
 
 
-    public function lastViewedVersion($document)
+    public function scopeClients($query)
     {
-        return $this->clientDocuments()
-            ->where('document_id', $document->id)
-            ->orderBy('last_viewed_version', 'desc')
-            ->first();
+        return $query->where('role', UserRole::CLIENT->value);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', UserStatus::ACTIVE->value);
     }
 
 }

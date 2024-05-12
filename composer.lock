@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44d8185187ad62ec42dc2fe932715ec5",
+    "content-hash": "c3aa9986f78d59283e019c769203fdbd",
     "packages": [
         {
             "name": "brick/math",
@@ -2471,6 +2471,43 @@
                 }
             ],
             "time": "2023-02-08T01:06:31+00:00"
+        },
+        {
+            "name": "pear/text_diff",
+            "version": "v1.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/Text_Diff.git",
+                "reference": "576c1be4af3f8b2e4fe7a16eead0740a822b5797"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/Text_Diff/zipball/576c1be4af3f8b2e4fe7a16eead0740a822b5797",
+                "reference": "576c1be4af3f8b2e4fe7a16eead0740a822b5797",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Text/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "description": "Engine for performing and rendering text diffs",
+            "homepage": "http://pear.php.net/package/Text_Diff",
+            "keywords": [
+                "PEAR",
+                "diff",
+                "text"
+            ],
+            "support": {
+                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Text_Diff",
+                "source": "https://github.com/pear/Text_Diff"
+            },
+            "time": "2024-03-10T17:35:35+00:00"
         },
         {
             "name": "phpoption/phpoption",
