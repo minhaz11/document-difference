@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('document_id')->constrained();
             $table->string('version');
-            $table->json('body_content');
-            $table->json('tags_content');
+            $table->text('body_content');
+            $table->text('tags_content');
             $table->timestamps();
         });
     }
