@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\UserRole;
 use App\Models\Document;
 use App\Models\DocumentVersion;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -24,10 +23,11 @@ class DocumentUserFactory extends Factory
     public function definition(): array
     {
         $documentId = fake()->randomElement($this->getDocumentIds());
+
         return [
             'document_id'         => $documentId,
             'user_id'             => fake()->randomElement($this->getUserIds()),
-            'last_viewed_version' => DocumentVersion::whereDocumentId($documentId)->first()->value('version')
+            'last_viewed_version' => fake()->randomFloat(2,1,2),
         ];
     }
 
@@ -37,7 +37,6 @@ class DocumentUserFactory extends Factory
             $this->userIds = DB::table('users')
                 ->where('role', UserRole::CLIENT->value)
                 ->inRandomOrder()
-                ->take(50)
                 ->pluck('id')
                 ->toArray();
         }
@@ -47,8 +46,7 @@ class DocumentUserFactory extends Factory
     private function getDocumentIds(): array
     {
         if (empty($this->documentIds)) {
-            $this->documentIds = DB::table('documents')
-                ->inRandomOrder()
+            $this->documentIds = Document::active()
                 ->take(50)
                 ->pluck('id')
                 ->toArray();

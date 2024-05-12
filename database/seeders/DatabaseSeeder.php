@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\UserStatus;
 use App\Models\Document;
 use App\Models\DocumentUser;
 use App\Models\DocumentVersion;
@@ -17,7 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $singleUser = User::factory()->create(['email' => 'user@mail.com']);
+        $singleUser = User::factory()->create([
+            'email' => 'user@mail.com',
+            'status' => UserStatus::ACTIVE->value
+        ]);
 
         $this->call([
             AuthorSeeder::class,
@@ -25,7 +29,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->command->info('Started seeding clients...');
-        User::factory(300)->create();
+        User::factory(299)->create();
         $this->command->info('Ended seeding clients...');
 
 

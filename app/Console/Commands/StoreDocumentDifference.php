@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\DocumentStatus;
+use App\Models\DocumentUser;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Text_Diff;
@@ -30,32 +31,37 @@ class StoreDocumentDifference extends Command
     public function handle()
     {
         $clients = User::clients()->active()
-            ->with([
-                'clientDocuments' => function ($query) {
-                   $query->whereStatus(DocumentStatus::ACTIVE->value);
-                 },
-                'clientDocuments.versions'
-            ]);
+            ->with(['clientDocuments' => function ($query) {
+                $query->active();
+            }])->get();
 
         foreach ($clients as $client)
         {
             foreach ($client->clientDocuments as $document)
             {
-                $latestDocument = $document->versions->orderBy('version', 'DESC')->first();
-                $lastViewedDocument = $document->versions->where('version', $document->pivot->last_viewed_version)->first();
 
-                if ($latestDocument->id != $lastViewedDocument->id)
+                $latestDocument = $document->versions()->orderBy('version', 'DESC')->first();
+                $lastViewedDocument = $document->versions()->where('version', $document->pivot->last_viewed_version)->first();
+
+                if (($latestDocument && $lastViewedDocument) && $latestDocument->id != $lastViewedDocument->id)
                 {
                     $difference = $this->determineDocumentDifference(
                         $lastViewedDocument->body_content,
                         $latestDocument->body_content
                     );
 
-                    $document->clients()->update([
-                        'user_id' => $client->id,
-                        'document_difference' => $difference,
-                    ]);
+                    if($difference){
+                        DocumentUser::create([
+                            'user_id' => $client->id,
+                            'document_id' => $document->id,
+                            'document_difference' => $difference,
+                            'last_viewed_version' => $lastViewedDocument->version,
+                        ]);
+                    }
+
                 }
+
+
             }
         }
     }
