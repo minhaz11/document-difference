@@ -14,6 +14,7 @@
 - Change database credentials with yours.
 - Run `php artisan migrate --seed` to migrate the database.
 - Now you are ready to go.
+- Login with these credentials "user@mail.com" and "password"
 
 ##### Open `http://localhost:8000` in your browser to see the app running.
 
